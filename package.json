@@ -1,0 +1,17 @@
+{
+  "name": "com.spark.signal-bus",
+  "version": "1.0.0",
+  "displayName": "[Spark] Signal bus",
+  "description": "",
+  "unity": "2022.3",
+  "dependencies": {
+
+  },
+  "keywords": [
+  ],
+  "author": {
+    "name": "Spark717",
+    "email": "007ruslan007@gmail.com",
+    "url": "https://github.com/spark717"
+  }
+}
