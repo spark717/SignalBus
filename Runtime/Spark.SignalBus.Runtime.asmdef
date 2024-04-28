@@ -1,7 +1,9 @@
 {
     "name": "Spark.SignalBus.Runtime",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Spark.DependencyInjector.Runtime"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -9,6 +11,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.spark.dependency-injector",
+            "expression": "1.0.0",
+            "define": "SPARK_DI"
+        }
+    ],
     "noEngineReferences": false
 }
