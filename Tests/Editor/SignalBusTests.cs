@@ -1,5 +1,7 @@
+using System.Reflection;
 using NUnit.Framework;
 using Spark;
+using UnityEngine;
 
 public class SignalBusTests
 {
@@ -32,15 +34,21 @@ public class SignalBusTests
     {
         var sb = new SignalBus();
         var subscriber = new Subscriber();
-        var a = 7;
+        var a = Random.Range(0, 10);
+        var b = Random.Range(0, 10);
+        var c = Random.Range(0, 10);
 
         sb.Subscribe(subscriber);
         sb.Fire(new Signal()
         {
             A = a,
+            B = b,
+            C = c
         });
 
         Assert.IsTrue(subscriber.A == a);
+        Assert.IsTrue(subscriber.B == b);
+        Assert.IsTrue(subscriber.C == c);
     }
     
     [Test]
@@ -233,5 +241,30 @@ public class SignalBusTests
 
         Assert.IsTrue(subscriber1.A == a);
         Assert.IsTrue(subscriber2.A == a);
+    }
+
+    [Test]
+    public void SubscribeObjectWithInheritedMethods()
+    {
+        var sb = new SignalBus();
+        var subscriber = new SubscriberWithInheritadeMethods();
+        var a = Random.Range(0, 10);
+        var b = Random.Range(0, 10);
+        var c = Random.Range(0, 10);
+
+        sb.Subscribe(subscriber);
+        sb.Fire(new Signal()
+        {
+            A = a,
+            B = b,
+            C = c
+        });
+
+        Assert.IsTrue(subscriber.A == a);
+        Assert.IsTrue(subscriber.NewA == a);
+        Assert.IsTrue(subscriber.B == b);
+        Assert.IsTrue(subscriber.NewB == b);
+        Assert.IsTrue(subscriber.C == c);
+        Assert.IsTrue(subscriber.NewC == c);
     }
 }

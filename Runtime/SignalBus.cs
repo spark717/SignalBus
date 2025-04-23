@@ -17,34 +17,40 @@ namespace Spark
                 return;
             }
 
-            var methods = subscriber.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            foreach (var methodInfo in methods)
+            var objType = subscriber.GetType();
+            while (objType != null)
             {
-                if (Attribute.IsDefined(methodInfo, typeof(OnSignalAttribute)) == false)
-                    continue;
+                var methods = objType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-                var prms = methodInfo.GetParameters();
-
-                if (prms.Length != 1)
+                foreach (var methodInfo in methods)
                 {
-                    Log.Excetion(new ArgumentException("Signal action has invalid arguments count"));
-                    return;
+                    if (Attribute.IsDefined(methodInfo, typeof(OnSignalAttribute)) == false)
+                        continue;
+
+                    var prms = methodInfo.GetParameters();
+
+                    if (prms.Length != 1)
+                    {
+                        Log.Excetion(new ArgumentException("Signal action has invalid arguments count"));
+                        return;
+                    }
+
+                    var arg = prms.First();
+
+                    if (typeof(ISignal).IsAssignableFrom(arg.ParameterType) == false)
+                    {
+                        Log.Excetion(new ArgumentException("Signal action has invalid argument type"));
+                        return;
+                    }
+
+                    var handler = GetHandler(arg.ParameterType);
+                    handler.Subscribe(subscriber, methodInfo);
                 }
 
-                var arg = prms.First();
-
-                if (typeof(ISignal).IsAssignableFrom(arg.ParameterType) == false)
-                {
-                    Log.Excetion(new ArgumentException("Signal action has invalid argument type"));
-                    return;
-                }
-
-                var handler = GetHandler(arg.ParameterType);
-                handler.Subscribe(subscriber, methodInfo);
+                objType = objType.BaseType;
             }
         }
-
+        
         public void Subscribe<T>(object subscriber, OnSignal<T> action) where T : ISignal
         {
             if (subscriber == null)
