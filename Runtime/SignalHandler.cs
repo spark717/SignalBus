@@ -40,7 +40,7 @@ namespace Spark
             _callsCount--;
         }
 
-        public void Subscribe(object subscriber, Action<T> action)
+        public void Subscribe(object subscriber, OnSignal<T> action)
         {
             var newSubscription = new Subscription<T>()
             {
@@ -53,7 +53,7 @@ namespace Spark
 
         public override void Subscribe(object subscriber, MethodInfo method)
         {
-            var action = (Action<T>)method.CreateDelegate(typeof(Action<T>), subscriber);
+            var action = (OnSignal<T>)method.CreateDelegate(typeof(OnSignal<T>), subscriber);
             Subscribe(subscriber, action);
         }
 
@@ -69,7 +69,7 @@ namespace Spark
             }
         }
         
-        public void Unsubscribe(Action<T> action)
+        public void Unsubscribe(OnSignal<T> action)
         {
             foreach (var subscription in _subscriptions)
             {

@@ -45,7 +45,7 @@ namespace Spark
             }
         }
 
-        public void Subscribe<T>(object subscriber, Action<T> action) where T : ISignal
+        public void Subscribe<T>(object subscriber, OnSignal<T> action) where T : ISignal
         {
             if (subscriber == null)
             {
@@ -63,7 +63,7 @@ namespace Spark
             handler.Subscribe(subscriber, action);
         }
 
-        public void Subscribe<T>(Action<T> action) where T : ISignal
+        public void Subscribe<T>(OnSignal<T> action) where T : ISignal
         {
             if (action == null)
             {
@@ -89,7 +89,7 @@ namespace Spark
             }
         }
 
-        public void Unsubscribe<T>(Action<T> action) where T : ISignal
+        public void Unsubscribe<T>(OnSignal<T> action) where T : ISignal
         {
             if (action == null)
             {
